@@ -134,7 +134,6 @@ while running:
             tears.y = player.y
             tears.state = 'ready'
             score.value += 1
-            print(score.value)
             enemy[i].x = randint(64, 735)
             enemy[i].y = randint(50,150)
 
