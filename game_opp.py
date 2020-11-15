@@ -6,18 +6,16 @@ from math import sqrt, pow
 #initializes pygame
 pygame.init()
 
-#creates the screen with the arguments passed as a tuple of (Width, Height)
-screen = pygame.display.set_mode((800, 600))
+#screen size and background image
+screen = pygame.display.set_mode((800, 600)) #creates the screen with the arguments passed as a tuple of (Width, Height)
+background = background = pygame.image.load('images/zen.jpg')
 
-#background
-background = pygame.image.load('images/zen.jpg')
-
-#setting title and icon
-pygame.display.set_caption("depresso shooter scooter")
+#icon and title
 icon = pygame.image.load('images/icon.png')
+pygame.display.set_caption('depresso shooter scooter')
 pygame.display.set_icon(icon)
 
-#Background sound
+#Background music
 mixer.music.load('sounds/bg_music.mp3')
 mixer.music.play(-1)
 
@@ -44,9 +42,8 @@ class Enemy:
     def draw(self):
         screen.blit(self.image, (self.x, self.y))
 
-
 #Bullet
-class Bullet:
+class Tears:
     def __init__(self):
         self.image = pygame.image.load('images/tear3.png')
         self.x = 0
@@ -63,7 +60,7 @@ class Bullet:
         self.sound = mixer.Sound('sounds/laser.wav')
         return bullet_sound.play()
 
-#score
+#Score
 class Score:
     def __init__(self):
         self.value = 0
@@ -72,10 +69,10 @@ class Score:
         self.y = 10
 
     def show(self):
-        showscore = self.font.render(f'Score: {str(self.value)}', True, (0, 0, 0 ))
+        showscore = self.font.render(f'Score: {str(self.value)}', True, (255, 255, 255))
         screen.blit(showscore, (self.x, self.y))
 
-
+#Checks collision
 def isCollision(enemyX, enemyY, bulletX, bulletY):
     distance = sqrt(pow((enemyX - bulletX), 2) + pow((enemyY - bulletY), 2))
     if distance < 35:
@@ -83,33 +80,17 @@ def isCollision(enemyX, enemyY, bulletX, bulletY):
     else:
         return False
 
-#GamveOver
-def isOver(enemyX, enemyY, playerX, playerY):
-    distance = sqrt(pow((enemyX - playerX), 2) + pow((enemyY - playerY), 2))
-    if distance < 35:
-        return True
-    else:
-        return False
-
-fontover = pygame.font.Font('freesansbold.ttf', 64)
-def gameover():
-    over = fontover.render(f'GAME OVER!', True, (0, 0, 0 ))
-    screen.blit(over, (200,250))
-
-
 player = Player()
 enemy = [Enemy('images/sel2.jpg'), Enemy('images/d_grade.png'), Enemy('images/plagiarism.png'), Enemy('images/canvas3.png'), Enemy('images/zoom.png'), Enemy('images/hackerrank.png')]
-tear = Bullet()
+tears = Tears()
 score = Score()
 
 #Game loop
 running = True
 while running:
-    #background color (r, g, b)
-    screen.fill((45, 48, 51))
 
-    #background image
-    screen.blit(background, (0,0))
+    screen.fill((45, 48, 51)) #draw a background of color (r, g, b)
+    screen.blit(background, (0,0)) #draw background image
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -121,10 +102,10 @@ while running:
             if event.key == pygame.K_RIGHT:
                 player.x_change = 1
             if event.key == pygame.K_SPACE:
-                if tear.state == 'ready':
-                    tear.x = player.x
-                    tear.sound.play()
-                    tear.draw()
+                if tears.state == 'ready':
+                    tears.x = player.x
+                    tears.sound.play()
+                    tears.draw()
             
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -148,10 +129,10 @@ while running:
             enemy[i].y += enemy[i].y_change
 
         #collision
-        collision = isCollision(enemy[i].x, enemy[i].y, tear.x, tear.y)
+        collision = isCollision(enemy[i].x, enemy[i].y, tears.x, tears.y)
         if collision == True:
-            tear.y = player.y
-            tear.state = 'ready'
+            tears.y = player.y
+            tears.state = 'ready'
             score.value += 1
             print(score.value)
             enemy[i].x = randint(64, 735)
@@ -160,13 +141,13 @@ while running:
         enemy[i].draw()
 
     #bullet movement
-    if tear.y <= 0:
-        tear.y = 480
-        tear.state = 'ready'
+    if tears.y <= 0:
+        tears.y = 480
+        tears.state = 'ready'
  
-    if tear.state == 'fire':
-        tear.draw()
-        tear.y -= tear.y_change
+    if tears.state == 'fire':
+        tears.draw()
+        tears.y -= tears.y_change
 
     player.draw() #draws player
     score.show()
