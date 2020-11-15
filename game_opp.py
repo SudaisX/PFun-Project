@@ -58,7 +58,7 @@ class Tears:
 
     def sound(self):
         self.sound = mixer.Sound('sounds/laser.wav')
-        return bullet_sound.play()
+        bullet_sound.play()
 
 #Score
 class Score:
