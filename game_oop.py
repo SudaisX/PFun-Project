@@ -1,7 +1,7 @@
 import pygame
 from random import randint
 from math import sqrt, pow
-
+from pygame import mixer
 
 pygame.init() #initializes pygame
 screen = pygame.display.set_mode((800, 600)) #creates the screen with the arguments passed as a tuple of (Width, Height)
@@ -11,6 +11,10 @@ background = pygame.image.load('classroom.jpg')
 pygame.display.set_caption("depresso shooter scooter")
 icon = pygame.image.load('icon.png')
 pygame.display.set_icon(icon)
+
+#Background sound
+mixer.music.load('bg_music.mp3')
+mixer.music.play(-1)
 
 class Player:
     def __init__(self, image, x, y, changeX):

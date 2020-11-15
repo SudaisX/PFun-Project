@@ -10,15 +10,15 @@ pygame.init()
 screen = pygame.display.set_mode((800, 600))
 
 #background
-background = pygame.image.load('classroom.jpg')
+background = pygame.image.load('images/zen.jpg')
 
 #setting title and icon
 pygame.display.set_caption("depresso shooter scooter")
-icon = pygame.image.load('icon.png')
+icon = pygame.image.load('images/icon.png')
 pygame.display.set_icon(icon)
 
 #Background sound
-mixer.music.load('background.wav')
+mixer.music.load('sounds/bg_music.mp3')
 mixer.music.play(-1)
 
 #Player
@@ -29,16 +29,16 @@ class Player:
         self.y = y
         self.changeInX = changeInX
 
-player = Player('player.png', 370, 520, 0)
+player = Player('images/player.png', 370, 520, 0)
 
-playerImg = pygame.image.load('player.png')
+playerImg = pygame.image.load('images/player.png')
 playerX = 370
 playerY = 520
 playerX_change = 0
 
 #Enemy
 enemies = 6
-enemyImg = [pygame.image.load('book.png'), pygame.image.load('assignment.png'), pygame.image.load('brain.png'), pygame.image.load('list.png'), pygame.image.load('monster1.png'), pygame.image.load('monster2.png')]
+enemyImg = [pygame.image.load('images/sel2.jpg'), pygame.image.load('images/d_grade.png'), pygame.image.load('images/plagiarism.png'), pygame.image.load('images/zoom.png'), pygame.image.load('images/hackerrank.png'), pygame.image.load('images/canvas3.png')]
 #enemyImg = []
 enemyX = []
 enemyY = []
@@ -46,14 +46,14 @@ enemyX_change = []
 enemyY_change = []
 
 for i in range(enemies):
-    #enemyImg.append(pygame.image.load('book.png'))
+    #enemyImg.append(pygame.image.load('jessica.jpg'))
     enemyX.append(randint(64, 735))
     enemyY.append(randint(50,150))
     enemyX_change.append(0.3)
     enemyY_change.append(40)
 
 #Bullet
-bulletImg = pygame.image.load('tear3.png')
+bulletImg = pygame.image.load('images/tear3.png')
 bulletX = 0
 bulletY = playerY
 bulletY_change = 4
@@ -66,7 +66,7 @@ scoreX = 10
 scoreY = 10
 
 def showscore(scoreX, scoreY):
-    score = font.render(f'Score: {str(scoreVal)}', True, (0, 0, 0 ))
+    score = font.render(f'Score: {str(scoreVal)}', True, (255, 255, 255 ))
     screen.blit(score, (scoreX, scoreY))
 
 def enemy(x, y, i):
@@ -120,6 +120,8 @@ while running:
                 playerX_change = 1
             if event.key == pygame.K_SPACE:
                 if bulletState == 'ready':
+                    bullet_sound = mixer.Sound('sounds/laser.wav')
+                    bullet_sound.play()
                     bulletX = playerX
                     bullet(bulletX, bulletY)
             
@@ -154,6 +156,8 @@ while running:
         #collision
         collision = isCollision(enemyX[i], enemyY[i], bulletX, bulletY)
         if collision == True:
+            #explosion_sound = mixer.Sound('explosion.wav')
+            #explosion_sound.play()
             bulletY = playerY
             bulletState = 'ready'
             scoreVal += 1
