@@ -22,15 +22,6 @@ mixer.music.load('sounds/bg_music.mp3')
 mixer.music.play(-1)
 
 #Player
-class Player:
-    def __init__(self, image, x, y, changeInX):
-        self.image = pygame.image.load(f'{image}')
-        self.x = x
-        self.y = y
-        self.changeInX = changeInX
-
-player = Player('images/player.png', 370, 520, 0)
-
 playerImg = pygame.image.load('images/player.png')
 playerX = 370
 playerY = 520
