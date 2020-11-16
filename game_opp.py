@@ -53,12 +53,9 @@ class Tears:
         self.sound = mixer.Sound('sounds/laser.wav')
 
     def draw(self):
+        #self.sound.play()
         self.state = 'fire'
         screen.blit(self.image, (self.x + 16, self.y + 10)) #16 and 10 added to centralise the tear
-
-    def sound(self):
-        self.sound = mixer.Sound('sounds/laser.wav')
-        bullet_sound.play()
 
 #Score
 class Score:
@@ -80,8 +77,19 @@ def isCollision(enemyX, enemyY, bulletX, bulletY):
     else:
         return False
 
+#Player
 player = Player()
-enemy = [Enemy('images/sel2.jpg'), Enemy('images/d_grade.png'), Enemy('images/plagiarism.png'), Enemy('images/canvas3.png'), Enemy('images/zoom.png'), Enemy('images/hackerrank.png')]
+
+#Enemies
+sel = Enemy('images/sel2.jpg')
+d_grade = Enemy('images/d_grade.png')
+plagiarism = Enemy('images/plagiarism.png')
+canvas = Enemy('images/canvas3.png')
+zoom = Enemy('images/zoom.png')
+hackerrank = Enemy('images/hackerrank.png')
+enemy = [sel, d_grade, plagiarism, canvas, zoom, hackerrank]
+
+#tears + score
 tears = Tears()
 score = Score()
 
