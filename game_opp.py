@@ -30,6 +30,12 @@ class Player:
     def draw(self):
         screen.blit(self.image, (self.x, self.y))
 
+    def boundrycheck(self):
+        if self.x < 0:
+            self.x = 0
+        elif self.x > 736:
+            self.x = 736
+
 #Enemy
 class Enemy:
     def __init__(self, image):
@@ -53,7 +59,6 @@ class Tears:
         self.sound = mixer.Sound('sounds/laser.wav')
 
     def draw(self):
-        #self.sound.play()
         self.state = 'fire'
         screen.blit(self.image, (self.x + 16, self.y + 10)) #16 and 10 added to centralise the tear
 
@@ -121,10 +126,7 @@ while running:
 
     #Check student's boundries
     player.x += player.x_change
-    if player.x < 0:
-        player.x = 0
-    elif player.x > 736:
-        player.x = 736
+    player.boundrycheck()
 
     for i in range(len(enemy)):
         #enemy movement
@@ -147,7 +149,7 @@ while running:
 
         enemy[i].draw()
 
-    #bullet movement
+    #tears movement
     if tears.y <= 0:
         tears.y = 480
         tears.state = 'ready'
