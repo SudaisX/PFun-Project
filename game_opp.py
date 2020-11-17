@@ -163,6 +163,7 @@ while running:
         if enemy[i].checkover():
             break
         
+        #enemy movement
         enemy[i].x += enemy[i].x_change
         if enemy[i].x < 0:
             enemy[i].x_change = enemy[i].newX(score.value)
