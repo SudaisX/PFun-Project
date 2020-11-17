@@ -41,8 +41,8 @@ class Enemy:
     def __init__(self, image):
         self.image = pygame.image.load(image)
         self.x = randint(64, 735)
-        self.y = randint(50,150)
-        self.x_change = 0.4
+        self.y = randint(50,100)
+        self.x_change = 0.5
         self.y_change = 40
 
     def draw(self):
@@ -50,7 +50,7 @@ class Enemy:
 
     def newX(self, score):
         if score >= 0 and score < 15:
-            return 0.4
+            return 0.5
         elif score >= 15 and score < 30:
             return 0.6
         elif score >= 30 and score < 60:
@@ -77,7 +77,7 @@ class Tears:
         self.image = pygame.image.load('images/tear3.png')
         self.x = 0
         self.y = player.y
-        self.y_change = 4
+        self.y_change = 4.5
         self.state = 'ready'  #ready = you cant see, fire = tear currently moving
         self.sound = mixer.Sound('sounds/laser.wav')
 
@@ -142,9 +142,9 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN:  #check keystroke for Left or Right
             if event.key == pygame.K_LEFT:
-                player.x_change = -1  
+                player.x_change = -1.2
             if event.key == pygame.K_RIGHT:
-                player.x_change = 1
+                player.x_change = 1.2
             if event.key == pygame.K_SPACE:
                 if tears.state == 'ready':
                     tears.x = player.x
