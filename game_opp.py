@@ -76,20 +76,21 @@ class Tears:
 
 #Parent class for Text
 class Text:
-    def __init__(self, x, y, size):
+    def __init__(self, x, y, size, type):
         self.value = 0
         self.font = pygame.font.Font('freesansbold.ttf', size)
         self.x = x
         self.y = y
+        self.type = type
+        self.text = ''
 
-    def showscore(self):
-        showscore = self.font.render(f'Score: {str(self.value)}', True, (255, 255, 255))
-        screen.blit(showscore, (self.x, self.y))
-
-    def showgameover(self):
-        gameover = self.font.render(f'GAME OVER!!', True, (255, 255, 255))
-        screen.blit(gameover, (self.x, self.y))
-
+    def show(self):
+        if self.type == 'score':
+            self.text = f'Score: {str(self.value)}'
+        if self.type == 'gameover':
+            self.text = 'GAME OVER!!'
+        text = self.font.render(self.text, True, (255, 255, 255))
+        screen.blit(text, (self.x, self.y))
 
 #Checks collision
 def isCollision(enemyX, enemyY, bulletX, bulletY):
@@ -115,8 +116,8 @@ enemy = [sel, d_grade, plagiarism, canvas, zoom, hackerrank]
 tears = Tears()
 
 #Texts
-score = Text(10, 10, 32) #x, y, size
-gameover = Text(200, 250, 64) #x, y, size
+score = Text(10, 10, 32, 'score') #x, y, size, type
+gameover = Text(200, 250, 64, 'gameover') #x, y, size, type
 
 #Game loop
 running = True
@@ -154,7 +155,7 @@ while running:
             for j in range(len(enemy)):
                 #remove_enemies()
                 enemy[j].y = 2000
-            gameover.showgameover()
+            gameover.show()
             break
         
         enemy[i].x += enemy[i].x_change
@@ -186,5 +187,5 @@ while running:
         tears.y -= tears.y_change
 
     player.draw() #draws player
-    score.showscore()
+    score.show()
     pygame.display.update() #updates display within the loop
