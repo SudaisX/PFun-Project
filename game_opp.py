@@ -59,6 +59,8 @@ class Enemy:
             return 1.2
         elif score >= 90 and score < 110:
             return 1.4
+        else:
+            return 1.6
 
     def checkover(self):
         if self.y > 440:
@@ -97,7 +99,7 @@ class Text:
         if self.type == 'score':
             self.text = f'Score: {str(self.value)}'
         if self.type == 'gameover':
-            self.text = 'GAME OVER!!'
+            self.text = 'GAME OVER!'
         text = self.font.render(self.text, True, (255, 255, 255))
         screen.blit(text, (self.x, self.y))
 
@@ -126,7 +128,7 @@ tears = Tears()
 
 #Texts
 score = Text(10, 10, 32, 'score') #x, y, size, type
-gameover = Text(200, 250, 64, 'gameover') #x, y, size, type
+gameover = Text(200, 360, 64, 'gameover') #x, y, size, type
 
 #Game loop
 running = True
@@ -158,11 +160,10 @@ while running:
 
     #enemy movement
     for i in range(len(enemy)):
-
         #Game Over
         if enemy[i].checkover():
             break
-        
+
         #enemy movement
         enemy[i].x += enemy[i].x_change
         if enemy[i].x < 0:
@@ -181,7 +182,7 @@ while running:
             enemy[i].x = randint(64, 735)
             enemy[i].y = randint(50,150)
 
-        enemy[i].draw()
+        enemy[i].draw() #draw each enemy
 
     #tears movement
     if tears.y <= 0:
