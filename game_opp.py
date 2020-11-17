@@ -121,7 +121,8 @@ plagiarism = Enemy('images/plagiarism.png')
 canvas = Enemy('images/canvas3.png')
 zoom = Enemy('images/zoom.png')
 hackerrank = Enemy('images/hackerrank.png')
-enemies = [sel, d_grade, plagiarism, canvas, zoom, hackerrank]
+fail = Enemy('images/fail.png')
+enemies = [d_grade, plagiarism, canvas, zoom, hackerrank, fail, sel]
 
 #Tears
 tears = Tears()
