@@ -22,7 +22,7 @@ mixer.music.play(-1)
 #Player
 class Player:
     def __init__(self):
-        self.image = pygame.image.load('images/player.png')
+        self.image = pygame.image.load('images/stress2.png')
         self.x = 370
         self.y = 520
         self.x_change = 0
