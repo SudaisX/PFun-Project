@@ -62,7 +62,7 @@ class Enemy:
         else:
             return 1.6
 
-    def checkover(self):
+    def over(self):
         if self.y > 440:
             for e in enemies:
                 e.y = 2000
@@ -154,14 +154,14 @@ while running:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 player.x_change = 0
 
-    #Check student's boundries
+    #Check player's boundries
     player.x += player.x_change
     player.boundrycheck()
 
     #enemy movement
     for enemy in enemies:
         #Game Over
-        if enemy.checkover():
+        if enemy.over():
             break
 
         #enemy movement
