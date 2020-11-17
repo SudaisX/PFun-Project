@@ -64,7 +64,7 @@ class Enemy:
 
     def checkover(self):
         if self.y > 440:
-            for e in enemy:
+            for e in enemies:
                 e.y = 2000
             gameover.show()
             return True
@@ -121,7 +121,7 @@ plagiarism = Enemy('images/plagiarism.png')
 canvas = Enemy('images/canvas3.png')
 zoom = Enemy('images/zoom.png')
 hackerrank = Enemy('images/hackerrank.png')
-enemy = [sel, d_grade, plagiarism, canvas, zoom, hackerrank]
+enemies = [sel, d_grade, plagiarism, canvas, zoom, hackerrank]
 
 #Tears
 tears = Tears()
@@ -159,30 +159,30 @@ while running:
     player.boundrycheck()
 
     #enemy movement
-    for i in range(len(enemy)):
+    for enemy in enemies:
         #Game Over
-        if enemy[i].checkover():
+        if enemy.checkover():
             break
 
         #enemy movement
-        enemy[i].x += enemy[i].x_change
-        if enemy[i].x < 0:
-            enemy[i].x_change = enemy[i].newX(score.value)
-            enemy[i].y += enemy[i].y_change
-        elif enemy[i].x > 736:
-            enemy[i].x_change = -enemy[i].newX(score.value)
-            enemy[i].y += enemy[i].y_change
+        enemy.x += enemy.x_change
+        if enemy.x < 0:
+            enemy.x_change = enemy.newX(score.value)
+            enemy.y += enemy.y_change
+        elif enemy.x > 736:
+            enemy.x_change = -enemy.newX(score.value)
+            enemy.y += enemy.y_change
 
         #collision
-        collision = isCollision(enemy[i].x, enemy[i].y, tears.x, tears.y)
+        collision = isCollision(enemy.x, enemy.y, tears.x, tears.y)
         if collision == True:
             tears.y = player.y
             tears.state = 'ready'
             score.value += 1
-            enemy[i].x = randint(64, 735)
-            enemy[i].y = randint(50,150)
+            enemy.x = randint(64, 735)
+            enemy.y = randint(50,150)
 
-        enemy[i].draw() #draw each enemy
+        enemy.draw() #draw each enemy
 
     #tears movement
     if tears.y <= 0:
