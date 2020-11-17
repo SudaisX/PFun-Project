@@ -60,6 +60,15 @@ class Enemy:
         elif score >= 90 and score < 110:
             return 1.4
 
+    def checkover(self):
+        if self.y > 440:
+            for e in enemy:
+                e.y = 2000
+            gameover.show()
+            return True
+        else:
+            return False
+
 #Bullet
 class Tears:
     def __init__(self):
@@ -151,11 +160,7 @@ while running:
     for i in range(len(enemy)):
 
         #Game Over
-        if enemy[i].y > 440:
-            for j in range(len(enemy)):
-                #remove_enemies()
-                enemy[j].y = 2000
-            gameover.show()
+        if enemy[i].checkover():
             break
         
         enemy[i].x += enemy[i].x_change
