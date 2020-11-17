@@ -87,12 +87,12 @@ class Tears:
 
 #Parent class for Text
 class Text:
-    def __init__(self, x, y, size, type):
+    def __init__(self, x, y, size, valtype):
         self.value = 0
         self.font = pygame.font.Font('freesansbold.ttf', size)
         self.x = x
         self.y = y
-        self.type = type
+        self.type = valtype
         self.text = ''
 
     def show(self):
