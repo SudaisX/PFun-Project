@@ -48,7 +48,7 @@ class Enemy:
     def draw(self):
         screen.blit(self.image, (self.x, self.y))
 
-    #speedy weedy function my radhika
+    #speedy weedy function by radhika
     def newX(self, score):
         if score >= 0 and score < 15:
             return 0.5
