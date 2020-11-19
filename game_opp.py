@@ -185,7 +185,7 @@ while running:
             enemy.y = randint(50,150)
 
         enemy.draw() #draw each enemy
-okfoadkfokadofadk
+
     #tears movement
     if tears.y <= 0:
         tears.y = 480
