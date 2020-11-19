@@ -50,15 +50,15 @@ class Enemy:
 
     #speedy weedy function by radhika
     def newX(self, score):
-        if score >= 0 and score < 15:
+        if score >= 0 and score < 10:
             return 0.5
-        elif score >= 15 and score < 30:
+        elif score >= 10 and score < 20:
             return 0.6
-        elif score >= 30 and score < 60:
+        elif score >= 20 and score < 30:
             return 0.8
-        elif score >= 60 and score < 90:
+        elif score >= 40 and score < 50:
             return 1.2
-        elif score >= 90 and score < 110:
+        elif score >= 50 and score < 60:
             return 1.4
         else:
             return 1.6
