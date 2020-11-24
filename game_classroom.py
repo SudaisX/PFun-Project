@@ -7,8 +7,8 @@ from math import sqrt, pow
 pygame.init()
 
 #screen size and background image
-screen = pygame.display.set_mode((800, 600)) #creates the screen with the arguments passed as a tuple of (Width, Height)
-background = background = pygame.image.load('images/zen.jpg')
+screen = pygame.display.set_mode((960, 540)) #creates the screen with the arguments passed as a tuple of (Width, Height)
+background = background = pygame.image.load('images/classroom_habib.jpeg')
 
 #icon and title
 icon = pygame.image.load('images/icon.png')
@@ -19,22 +19,16 @@ pygame.display.set_icon(icon)
 mixer.music.load('sounds/bg_music.mp3')
 mixer.music.play(-1)
 
-#Parent class
-class Parent:
-    def __init__(self, image, x, y, x_change, y_change):
-        self.image = pygame.image.load(image)
-        self.x = x
-        self.y = y
-        self.x_change = x_change
-        self.y_change = y_change
+#Player
+class Player:
+    def __init__(self):
+        self.image = pygame.image.load('images/player.png')
+        self.x = 480
+        self.y = 470
+        self.x_change = 0
 
     def draw(self):
         screen.blit(self.image, (self.x, self.y))
-
-#Player
-class Player(Parent):
-    def __init__(self):
-        Parent.__init__(self, 'images/player.png', 370, 520, 0, 0)
 
     def boundrycheck(self):
         if self.x < 0:
@@ -43,26 +37,50 @@ class Player(Parent):
             self.x = 736
 
 #Enemy
-class Enemy(Parent):
+class Enemy:
     def __init__(self, image):
-        Parent.__init__(self, image, randint(64, 735), randint(50,150), 0.3, 40)
+        self.image = pygame.image.load(image)
+        self.x = randint(64, 896)
+        self.y = randint(50,100)
+        self.x_change = 0.5
+        self.y_change = 40
 
+    def draw(self):
+        screen.blit(self.image, (self.x, self.y))
+
+    #speedy weedy function by radhika
     def newX(self, score):
-        if score >= 0 and score < 15:
-            return 0.4
-        elif score >= 15 and score < 30:
+        if score >= 0 and score < 10:
+            return 0.5
+        elif score >= 10 and score < 20:
             return 0.6
-        elif score >= 30 and score < 60:
+        elif score >= 20 and score < 30:
+            return 0.7
+        elif score >= 40 and score < 50:
             return 0.8
-        elif score >= 60 and score < 90:
+        elif score >= 50 and score < 60:
+            return 0.9
+        elif score >= 60 and score < 70:
+            return 1.0
+        else:
             return 1.2
-        elif score >= 90 and score < 110:
-            return 1.4
+
+    def over(self):
+        if self.y > 440:
+            for e in enemies:
+                e.y = 2000
+            gameover.show()
+            return True
+        else:
+            return False
 
 #Bullet
-class Tears(Parent):
+class Tears:
     def __init__(self):
-        Parent.__init__(self, 'images/tear3.png', 0, player.y, 0, 4)
+        self.image = pygame.image.load('images/tear3.png')
+        self.x = 0
+        self.y = player.y
+        self.y_change = 4.5
         self.state = 'ready'  #ready = you cant see, fire = tear currently moving
         self.sound = mixer.Sound('sounds/laser.wav')
 
@@ -70,17 +88,23 @@ class Tears(Parent):
         self.state = 'fire'
         screen.blit(self.image, (self.x + 16, self.y + 10)) #16 and 10 added to centralise the tear
 
-#Score
-class Score:
-    def __init__(self):
+#Parent class for Text
+class Text:
+    def __init__(self, x, y, size, valtype):
         self.value = 0
-        self.font = pygame.font.Font('freesansbold.ttf', 32)
-        self.x = 10
-        self.y = 10
+        self.font = pygame.font.Font('freesansbold.ttf', size)
+        self.x = x
+        self.y = y
+        self.type = valtype
+        self.text = ''
 
     def show(self):
-        showscore = self.font.render(f'Score: {str(self.value)}', True, (255, 255, 255))
-        screen.blit(showscore, (self.x, self.y))
+        if self.type == 'score':
+            self.text = f'Score: {str(self.value)}'
+        if self.type == 'gameover':
+            self.text = 'GAME OVER!'
+        text = self.font.render(self.text, True, (255, 255, 255))
+        screen.blit(text, (self.x, self.y))
 
 #Checks collision
 def isCollision(enemyX, enemyY, bulletX, bulletY):
@@ -100,11 +124,15 @@ plagiarism = Enemy('images/plagiarism.png')
 canvas = Enemy('images/canvas3.png')
 zoom = Enemy('images/zoom.png')
 hackerrank = Enemy('images/hackerrank.png')
-enemy = [sel, d_grade, plagiarism, canvas, zoom, hackerrank]
+fail = Enemy('images/fail.png')
+enemies = [d_grade, plagiarism, canvas, zoom, hackerrank, fail, sel]
 
-#tears + score
+#Tears
 tears = Tears()
-score = Score()
+
+#Texts
+score = Text(10, 10, 32, 'score') #x, y, size, type
+gameover = Text(270, 160, 64, 'gameover') #x, y, size, type
 
 #Game loop
 running = True
@@ -118,9 +146,9 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN:  #check keystroke for Left or Right
             if event.key == pygame.K_LEFT:
-                player.x_change = -1  
+                player.x_change = -1.2
             if event.key == pygame.K_RIGHT:
-                player.x_change = 1
+                player.x_change = 1.2
             if event.key == pygame.K_SPACE:
                 if tears.state == 'ready':
                     tears.x = player.x
@@ -130,30 +158,35 @@ while running:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 player.x_change = 0
 
-    #Check student's boundries
+    #Check player's boundries
     player.x += player.x_change
     player.boundrycheck()
 
-    for i in range(len(enemy)):
+    #enemy movement
+    for enemy in enemies:
+        #Game Over
+        if enemy.over():
+            break
+
         #enemy movement
-        enemy[i].x += enemy[i].x_change
-        if enemy[i].x < 0:
-            enemy[i].x_change = enemy[i].newX(score.value)
-            enemy[i].y += enemy[i].y_change
-        elif enemy[i].x > 736:
-            enemy[i].x_change = -enemy[i].newX(score.value)
-            enemy[i].y += enemy[i].y_change
+        enemy.x += enemy.x_change
+        if enemy.x < 0:
+            enemy.x_change = enemy.newX(score.value)
+            enemy.y += enemy.y_change
+        elif enemy.x > 896:
+            enemy.x_change = -enemy.newX(score.value)
+            enemy.y += enemy.y_change
 
         #collision
-        collision = isCollision(enemy[i].x, enemy[i].y, tears.x, tears.y)
+        collision = isCollision(enemy.x, enemy.y, tears.x, tears.y)
         if collision == True:
             tears.y = player.y
             tears.state = 'ready'
             score.value += 1
-            enemy[i].x = randint(64, 735)
-            enemy[i].y = randint(50,150)
+            enemy.x = randint(64, 896)
+            enemy.y = randint(50,100)
 
-        enemy[i].draw()
+        enemy.draw() #draw each enemy
 
     #tears movement
     if tears.y <= 0:
