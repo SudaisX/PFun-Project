@@ -24,7 +24,7 @@ class Player:
     def __init__(self):
         self.image = pygame.image.load('images/player.png')
         self.x = 480
-        self.y = 460
+        self.y = 465
         self.x_change = 0
 
     def draw(self):
