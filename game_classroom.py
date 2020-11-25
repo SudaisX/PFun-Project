@@ -127,7 +127,8 @@ hackerrank = Enemy('images/hackerrank.png')
 fail = Enemy('images/fail.png')
 panopto = Enemy('images/panopto.png')
 corona = Enemy('images/corona.png')
-enemies = [d_grade, plagiarism, canvas, zoom, hackerrank, fail, sel, panopto, corona]
+outlook = Enemy('images/outlook.png')
+enemies = [d_grade, plagiarism, canvas, zoom, hackerrank, fail, sel, panopto, corona, outlook]
 
 #Tears
 tears = Tears()
@@ -185,6 +186,7 @@ while running:
             tears.y = player.y
             tears.state = 'ready'
             score.value += 1
+            
             enemy.x = randint(64, 896)
             enemy.y = randint(50,100)
 
