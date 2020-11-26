@@ -53,17 +53,17 @@ class Enemy:
         if score >= 0 and score < 10:
             return 0.5
         elif score >= 10 and score < 20:
-            return 0.6
+            return 0.65
         elif score >= 20 and score < 30:
-            return 0.7
+            return 0.75
         elif score >= 40 and score < 50:
-            return 0.8
-        elif score >= 50 and score < 60:
             return 0.9
-        elif score >= 60 and score < 70:
+        elif score >= 50 and score < 60:
             return 1.0
+        elif score >= 60 and score < 70:
+            return 1.1
         else:
-            return 1.2
+            return 1.4
 
     def over(self):
         if self.y > 440:
