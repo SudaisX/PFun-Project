@@ -80,7 +80,7 @@ class Tears:
         self.image = pygame.image.load('images/tear3.png')
         self.x = 0
         self.y = player.y
-        self.y_change = 4.5
+        self.y_change = 5
         self.state = 'ready'  #ready = you cant see, fire = tear currently moving
         self.sound = mixer.Sound('sounds/laser.wav')
 
