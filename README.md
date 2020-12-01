@@ -1,7 +1,7 @@
 # depresso shooter scooter 
 
 # Main Game File  
-depresso shooter scooter.py  
+- depresso shooter scooter.py  
 
 # Requirements:
 - python  
@@ -9,5 +9,5 @@ depresso shooter scooter.py
 - images and sounds folder  
 
 # old Versions  
-game_zen.py  (oop version)  
-game_old.py  (non-oop)  
+- game_zen.py  (oop version)  
+- game_old.py  (non-oop)  
