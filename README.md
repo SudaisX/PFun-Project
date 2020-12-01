@@ -1,5 +1,8 @@
 # depresso shooter scooter 
-  
-habib classroom (oop optimised) - game_classroom.py  
-habib zen garden (oop optimised) - game_zen.py  
-non-oop - game.py  
+
+#Main Game File  
+depresso shooter scooter.py  
+
+#Old Versions  
+game_zen.py  (oop version)
+game_old.py  (non-oop)
