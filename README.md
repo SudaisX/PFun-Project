@@ -8,6 +8,6 @@
 - pygame  
 - images and sounds folder  
 
-# old Versions  
+# old versions  
 - game_zen.py  (oop version)  
 - game_old.py  (non-oop)  
