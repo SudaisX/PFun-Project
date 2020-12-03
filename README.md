@@ -6,8 +6,8 @@
 # Requirements:
 - python  
 - pygame  
+- depresso shooter scooter.py  
 - images and sounds folder  
 
 # old versions  
-- game_zen.py  (oop version)  
-- game_old.py  (non-oop)  
+- game_old.py  
