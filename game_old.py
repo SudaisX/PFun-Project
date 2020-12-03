@@ -1,76 +1,112 @@
 import pygame
+from pygame import mixer
 from random import randint
 from math import sqrt, pow
-from pygame import mixer
 
 #initializes pygame
 pygame.init()
 
-#creates the screen with the arguments passed as a tuple of (Width, Height)
-screen = pygame.display.set_mode((800, 600))
+#screen size and background image
+screen = pygame.display.set_mode((800, 600)) #creates the screen with the arguments passed as a tuple of (Width, Height)
+background = background = pygame.image.load('images/zen.jpg')
 
-#background
-background = pygame.image.load('images/zen.jpg')
-
-#setting title and icon
-pygame.display.set_caption("depresso shooter scooter")
+#icon and title
 icon = pygame.image.load('images/icon.png')
+pygame.display.set_caption('depresso shooter scooter')
 pygame.display.set_icon(icon)
 
-#Background sound
+#Background music
 mixer.music.load('sounds/bg_music.mp3')
 mixer.music.play(-1)
 
 #Player
-playerImg = pygame.image.load('images/player.png')
-playerX = 370
-playerY = 520
-playerX_change = 0
+class Player:
+    def __init__(self):
+        self.image = pygame.image.load('images/player.png')
+        self.x = 370
+        self.y = 520
+        self.x_change = 0
+
+    def draw(self):
+        screen.blit(self.image, (self.x, self.y))
+
+    def boundrycheck(self):
+        if self.x < 0:
+            self.x = 0
+        elif self.x > 736:
+            self.x = 736
 
 #Enemy
-enemies = 6
-enemyImg = [pygame.image.load('images/sel2.jpg'), pygame.image.load('images/d_grade.png'), pygame.image.load('images/plagiarism.png'), pygame.image.load('images/zoom.png'), pygame.image.load('images/hackerrank.png'), pygame.image.load('images/canvas3.png')]
-#enemyImg = []
-enemyX = []
-enemyY = []
-enemyX_change = []
-enemyY_change = []
+class Enemy:
+    def __init__(self, image):
+        self.image = pygame.image.load(image)
+        self.x = randint(64, 735)
+        self.y = randint(50,100)
+        self.x_change = 0.5
+        self.y_change = 40
 
-for i in range(enemies):
-    #enemyImg.append(pygame.image.load('jessica.jpg'))
-    enemyX.append(randint(64, 735))
-    enemyY.append(randint(50,150))
-    enemyX_change.append(0.3)
-    enemyY_change.append(40)
+    def draw(self):
+        screen.blit(self.image, (self.x, self.y))
+
+    #speedy weedy function by radhika
+    def newX(self, score):
+        if score >= 0 and score < 10:
+            return 0.5
+        elif score >= 10 and score < 20:
+            return 0.6
+        elif score >= 20 and score < 30:
+            return 0.7
+        elif score >= 40 and score < 50:
+            return 0.8
+        elif score >= 50 and score < 60:
+            return 0.9
+        elif score >= 60 and score < 70:
+            return 1.0
+        else:
+            return 1.2
+
+    def over(self):
+        if self.y > 440:
+            for e in enemies:
+                e.y = 2000
+            gameover.show()
+            return True
+        else:
+            return False
 
 #Bullet
-bulletImg = pygame.image.load('images/tear3.png')
-bulletX = 0
-bulletY = playerY
-bulletY_change = 4
-bulletState = 'ready' #ready = you cant see, fire = bullet currently moving
+class Tears:
+    def __init__(self):
+        self.image = pygame.image.load('images/tear3.png')
+        self.x = 0
+        self.y = player.y
+        self.y_change = 4.5
+        self.state = 'ready'  #ready = you cant see, fire = tear currently moving
+        self.sound = mixer.Sound('sounds/laser.wav')
 
-#score
-scoreVal = 0
-font = pygame.font.Font('freesansbold.ttf', 32)
-scoreX = 10
-scoreY = 10
+    def draw(self):
+        self.state = 'fire'
+        screen.blit(self.image, (self.x + 16, self.y + 10)) #16 and 10 added to centralise the tear
 
-def showscore(scoreX, scoreY):
-    score = font.render(f'Score: {str(scoreVal)}', True, (255, 255, 255 ))
-    screen.blit(score, (scoreX, scoreY))
+#Parent class for Text
+class Text:
+    def __init__(self, x, y, size, valtype):
+        self.value = 0
+        self.font = pygame.font.Font('freesansbold.ttf', size)
+        self.x = x
+        self.y = y
+        self.type = valtype
+        self.text = ''
 
-def enemy(x, y, i):
-    screen.blit(enemyImg[i], (x, y))
+    def show(self):
+        if self.type == 'score':
+            self.text = f'Score: {str(self.value)}'
+        if self.type == 'gameover':
+            self.text = 'GAME OVER!'
+        text = self.font.render(self.text, True, (255, 255, 255))
+        screen.blit(text, (self.x, self.y))
 
-def player(x, y):
-    screen.blit(playerImg, (x, y))
-
-def bullet(x, y):
-    global bulletState
-    bulletState = 'fire'
-    screen.blit(bulletImg, (x + 16, y + 10)) #16 and 10 added to centralise the bullet
-
+#Checks collision
 def isCollision(enemyX, enemyY, bulletX, bulletY):
     distance = sqrt(pow((enemyX - bulletX), 2) + pow((enemyY - bulletY), 2))
     if distance < 35:
@@ -78,96 +114,89 @@ def isCollision(enemyX, enemyY, bulletX, bulletY):
     else:
         return False
 
-#GamveOver
-def isOver(enemyX, enemyY, playerX, playerY):
-    distance = sqrt(pow((enemyX - playerX), 2) + pow((enemyY - playerY), 2))
-    if distance < 35:
-        return True
-    else:
-        return False
+#Player
+player = Player()
 
-fontover = pygame.font.Font('freesansbold.ttf', 64)
-def gameover():
-    over = fontover.render(f'GAME OVER!', True, (0, 0, 0 ))
-    screen.blit(over, (200,250))
+#Enemies
+sel = Enemy('images/sel2.jpg')
+d_grade = Enemy('images/d_grade.png')
+plagiarism = Enemy('images/plagiarism.png')
+canvas = Enemy('images/canvas3.png')
+zoom = Enemy('images/zoom.png')
+hackerrank = Enemy('images/hackerrank.png')
+fail = Enemy('images/fail.png')
+enemies = [d_grade, plagiarism, canvas, zoom, hackerrank, fail, sel]
+
+#Tears
+tears = Tears()
+
+#Texts
+score = Text(10, 10, 32, 'score') #x, y, size, type
+gameover = Text(200, 360, 64, 'gameover') #x, y, size, type
 
 #Game loop
 running = True
 while running:
-    #background color (r, g, b)
-    screen.fill((45, 48, 51))
+    screen.fill((45, 48, 51)) #draw a background of color (r, g, b)
+    screen.blit(background, (0,0)) #draw background image
 
-    #background image
-    screen.blit(background, (0,0))
-
+    #Check keystrokes
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
         if event.type == pygame.KEYDOWN:  #check keystroke for Left or Right
             if event.key == pygame.K_LEFT:
-                playerX_change = -1  
+                player.x_change = -1.2
             if event.key == pygame.K_RIGHT:
-                playerX_change = 1
+                player.x_change = 1.2
             if event.key == pygame.K_SPACE:
-                if bulletState == 'ready':
-                    bullet_sound = mixer.Sound('sounds/laser.wav')
-                    bullet_sound.play()
-                    bulletX = playerX
-                    bullet(bulletX, bulletY)
-            
+                if tears.state == 'ready':
+                    tears.x = player.x
+                    tears.sound.play()
+                    tears.draw()
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                playerX_change = 0
+                player.x_change = 0
 
-    #Check student's boundries
-    playerX += playerX_change
-    if playerX < 0:
-        playerX = 0
-    elif playerX > 736:
-        playerX = 736
+    #Check player's boundries
+    player.x += player.x_change
+    player.boundrycheck()
 
-    for i in range(enemies):
-        #game over
-        #if enemyY[i] > 200:
-        #    for j in range(enemies):
-        #        enemyY[j] = 2000
-        #    gameover()
-        #    break
+    #enemy movement
+    for enemy in enemies:
+        #Game Over
+        if enemy.over():
+            break
 
         #enemy movement
-        enemyX[i] += enemyX_change[i]
-        if enemyX[i] < 0:
-            enemyX_change[i] = 0.5
-            enemyY[i] += enemyY_change[i]
-        elif enemyX[i] > 736:
-            enemyX_change[i] = -0.5
-            enemyY[i] += enemyY_change[i]
+        enemy.x += enemy.x_change
+        if enemy.x < 0:
+            enemy.x_change = enemy.newX(score.value)
+            enemy.y += enemy.y_change
+        elif enemy.x > 736:
+            enemy.x_change = -enemy.newX(score.value)
+            enemy.y += enemy.y_change
 
         #collision
-        collision = isCollision(enemyX[i], enemyY[i], bulletX, bulletY)
+        collision = isCollision(enemy.x, enemy.y, tears.x, tears.y)
         if collision == True:
-            #explosion_sound = mixer.Sound('explosion.wav')
-            #explosion_sound.play()
-            bulletY = playerY
-            bulletState = 'ready'
-            scoreVal += 1
-            print(scoreVal)
-            enemyX[i] = randint(64, 735)
-            enemyY[i] = randint(50,150)
+            tears.y = player.y
+            tears.state = 'ready'
+            score.value += 1
+            enemy.x = randint(64, 735)
+            enemy.y = randint(50,150)
 
+        enemy.draw() #draw each enemy
 
-        enemy(enemyX[i], enemyY[i], i)
-
-    #bullet movement
-    if bulletY <= 0:
-        bulletY = 480
-        bulletState = 'ready'
+    #tears movement
+    if tears.y <= 0:
+        tears.y = 480
+        tears.state = 'ready'
  
-    if bulletState == 'fire':
-        bullet(bulletX, bulletY)
-        bulletY -= bulletY_change
+    if tears.state == 'fire':
+        tears.draw()
+        tears.y -= tears.y_change
 
-    player(playerX, playerY) #draws player
-    showscore(scoreX, scoreY)
+    player.draw() #draws player
+    score.show()
     pygame.display.update() #updates display within the loop
