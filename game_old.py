@@ -6,7 +6,7 @@ from math import sqrt, pow
 #initializes pygame
 pygame.init()
 
-#screen size and background image
+#screen size and background image!!
 screen = pygame.display.set_mode((800, 600)) #creates the screen with the arguments passed as a tuple of (Width, Height)
 background = background = pygame.image.load('images/zen.jpg')
 
